@@ -40,27 +40,12 @@
 [submodule "lookaside/zlib"]
 	path = lookaside/zlib
 	url = ../lookaside_zlib.git
-[submodule "deps/zlib"]
-	path = deps/zlib
-	url = ../deps_zlib.git
 [submodule "lookaside/ca-certificates"]
 	path = lookaside/ca-certificates
 	url = ../lookaside_ca-certificates.git
 [submodule "lookaside/tzdata"]
 	path = lookaside/tzdata
 	url = ../lookaside_tzdata.git
-[submodule "lookaside/nspr"]
-	path = lookaside/nspr
-	url = ../lookaside_nspr.git
-[submodule "lookaside/nss"]
-	path = lookaside/nss
-	url = ../lookaside_nss.git
-[submodule "deps/nss"]
-	path = deps/nss
-	url = ../deps_nss.git
-[submodule "lookaside/nss-util"]
-	path = lookaside/nss-util
-	url = ../lookaside_nss-util.git
 [submodule "lookaside/dejavu-fonts"]
 	path = lookaside/dejavu-fonts
 	url = ../lookaside_dejavu-fonts.git
@@ -73,24 +58,15 @@
 [submodule "lookaside/giflib"]
 	path = lookaside/giflib
 	url = ../lookaside_giflib.git
-[submodule "deps/giflib"]
-	path = deps/giflib
-	url = ../deps_giflib.git
 [submodule "lookaside/libpng"]
 	path = lookaside/libpng
 	url = ../lookaside_libpng.git
-[submodule "deps/libpng"]
-	path = deps/libpng
-	url = ../deps_libpng.git
 [submodule "tools/nasm"]
 	path = tools/nasm
 	url = ../tools_nasm.git
 [submodule "lookaside/libjpeg-turbo"]
 	path = lookaside/libjpeg-turbo
 	url = ../lookaside_libjpeg-turbo.git
-[submodule "deps/libjpeg-turbo"]
-	path = deps/libjpeg-turbo
-	url = ../deps_libjpeg-turbo.git
 [submodule "lookaside/curl"]
 	path = lookaside/curl
 	url = ../lookaside_curl.git
@@ -154,12 +130,6 @@
 [submodule "tools/gperf"]
 	path = tools/gperf
 	url = ../tools_gperf.git
-[submodule "tools/toolchain/sdk10_1607"]
-	path = tools/toolchain/sdk10_1607
-	url = ../tools_toolchain_sdk10_1607.git
-[submodule "tools/toolchain/vs2017bt"]
-	path = tools/toolchain/vs2017bt
-	url = ../tools_toolchain_vs2017bt.git
 [submodule "external/jansson"]
 	path = external/jansson
 	url = ../external_jansson.git
@@ -217,18 +187,42 @@
 [submodule "deps/jmc-p2repo-photon"]
 	path = deps/jmc-p2repo-photon
 	url = ../deps_jmc-p2repo-photon.git
-[submodule "deps/jmc-p2repo-babel-oxygen"]
-	path = deps/jmc-p2repo-babel-oxygen
-	url = ../deps_jmc-p2repo-babel-oxygen.git
-[submodule "tools/jdk8-jmc"]
-	path = tools/jdk8-jmc
-	url = ../tools_jdk8-jmc.git
 [submodule "deps/jmc"]
 	path = deps/jmc
 	url = ../deps_jmc.git
 [submodule "tools/gradle48"]
 	path = tools/gradle48
 	url = ../tools_gradle48.git
-[submodule "tools/gradle18"]
-	path = tools/gradle18
-	url = ../tools_gradle18.git
+[submodule "tools/bootjdk7_32"]
+	path = tools/bootjdk7_32
+	url = ../tools_bootjdk7_32.git
+[submodule "deps/jmc-p2repo-babel-photon"]
+	path = deps/jmc-p2repo-babel-photon
+	url = ../deps_jmc-p2repo-babel-photon.git
+[submodule "contrib/ojdkbuild-utils"]
+	path = contrib/ojdkbuild-utils
+	url = ../contrib_ojdkbuild-utils.git
+[submodule "tools/toolchain/sdk10_17763"]
+	path = tools/toolchain/sdk10_17763
+	url = ../tools_toolchain_sdk10_17763.git
+[submodule "tools/toolchain/vs2017bt_1416"]
+	path = tools/toolchain/vs2017bt_1416
+	url = ../tools_toolchain_vs2017bt_1416.git
+[submodule "contrib/local-cleaner"]
+	path = contrib/local-cleaner
+	url = ../contrib_local-cleaner.git
+[submodule "upstream/mslinks"]
+	path = upstream/mslinks
+	url = ../upstream_mslinks.git
+[submodule "deps/mslinks"]
+	path = deps/mslinks
+	url = ../deps_mslinks.git
+[submodule "tools/ghr"]
+	path = tools/ghr
+	url = ../tools_ghr.git
+[submodule "tools/bootjdk12"]
+	path = tools/bootjdk12
+	url = ../tools_bootjdk12.git
+[submodule "contrib/scripting-tasks"]
+	path = contrib/scripting-tasks
+	url = ../contrib_scripting-tasks.git

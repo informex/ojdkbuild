@@ -1,0 +1,191 @@
+# Copyright 2019, akashche at redhat.com
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+trigger:
+- master
+
+variables:
+  OJDKBUILD_JDK8_TAG: java-1.8.0-openjdk-1.8.0.242-1.b08
+  OJDKBUILD_JDK8_DEBUG_TAG: java-1.8.0-openjdk-debug-1.8.0.242-1.b08
+  OJDKBUILD_JDK8_32_TAG: java-1.8.0-openjdk-1.8.0.242-1.b08-x86
+  OJDKBUILD_JDK8_32_DEBUG_TAG: java-1.8.0-openjdk-debug-1.8.0.242-1.b08-x86
+  OJDKBUILD_JDK8_RPMBUILD: 0
+  OJDKBUILD_JDK11_TAG: java-11-openjdk-11.0.6.10-1
+  OJDKBUILD_JDK11_DEBUG_TAG: java-11-openjdk-debug-11.0.6.10-1
+  OJDKBUILD_JDK11_RPMBUILD: 0
+  OJDKBUILD_JDK13_TAG: java-13-openjdk-13.0.2.8-1
+  OJDKBUILD_JDK13_DEBUG_TAG: java-13-openjdk-debug-13.0.2.8-1
+  OJDKBUILD_JDK13_RPMBUILD: 0
+
+jobs:
+
+- job: jdk8
+  timeoutInMinutes: 0
+  pool:
+    vmImage: "vs2015-win2012r2"
+  steps:
+  - script: |
+      @echo on
+      git config --global core.autocrlf false || exit /b 1
+      call resources\scripts\modules.bat resources/profiles/jdk8_full.gitmodules.txt || exit /b 1
+      rd /s /q ".git" || exit /b 1
+      call "resources/scripts/set-compile-env-vs10-x86_64.bat" || exit /b 1
+      mkdir build || exit /b 1
+      pushd build || exit /b 1
+      cmake ../src/java-1.8.0-openjdk -G "NMake Makefiles" -Dopenjdk_RPMBUILD=$(OJDKBUILD_JDK8_RPMBUILD) -Dopenjdk_ENABLE_OPENJFX=ON -Dopenjdk_ENABLE_BOOTCYCLE=ON -Dopenjdk_ENABLE_CLEANUP=ON -Dopenjfx_ENABLE_CLEANUP=ON || exit /b 1
+      nmake installer || exit /b 1
+      popd || exit /b 1
+      dir dist || exit /b 1
+      if not "$(OJDKBUILD_JDK8_RPMBUILD)" == "0" tools\ghr\ghr.exe -t $(OJDKBUILD_GITHUB_TOKEN) -u ojdkbuild -r ojdkbuild -c $(Build.SourceVersion) $(OJDKBUILD_JDK8_TAG) dist || exit /b 1
+    enabled: false
+
+- job: jdk8_debug
+  timeoutInMinutes: 0
+  pool:
+    vmImage: "vs2015-win2012r2"
+  steps:
+  - script: |
+      @echo on
+      git config --global core.autocrlf false || exit /b 1
+      call resources\scripts\modules.bat resources/profiles/jdk8.gitmodules.txt || exit /b 1
+      rd /s /q ".git" || exit /b 1
+      call "resources/scripts/set-compile-env-vs10-x86_64.bat" || exit /b 1
+      mkdir build || exit /b 1
+      pushd build || exit /b 1
+      cmake ../src/java-1.8.0-openjdk -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Debug -Dopenjdk_RPMBUILD=$(OJDKBUILD_JDK8_RPMBUILD) -Dopenjdk_ENABLE_CLEANUP=ON || exit /b 1
+      nmake zip_debug || exit /b 1
+      popd || exit /b 1
+      dir dist || exit /b 1
+      if not "$(OJDKBUILD_JDK8_RPMBUILD)" == "0" tools\ghr\ghr.exe -t $(OJDKBUILD_GITHUB_TOKEN) -u ojdkbuild -r ojdkbuild -c $(Build.SourceVersion) $(OJDKBUILD_JDK8_DEBUG_TAG) dist || exit /b 1
+    enabled: false
+
+- job: jdk8_32
+  timeoutInMinutes: 0
+  pool:
+    vmImage: "vs2015-win2012r2"
+  steps:
+  - script: |
+      @echo on
+      git config --global core.autocrlf false || exit /b 1
+      call resources\scripts\modules.bat resources/profiles/jdk8_full.gitmodules.txt || exit /b 1
+      rd /s /q ".git" || exit /b 1
+      call "resources/scripts/set-compile-env-vs10-x86.bat" || exit /b 1
+      mkdir build || exit /b 1
+      pushd build || exit /b 1
+      cmake ../src/java-1.8.0-openjdk -G "NMake Makefiles" -Dopenjdk_RPMBUILD=$(OJDKBUILD_JDK8_RPMBUILD) -Dopenjdk_ENABLE_32_BIT=ON -Dopenjdk_ENABLE_OPENJFX=ON -Dopenjdk_ENABLE_BOOTCYCLE=ON -Dopenjdk_ENABLE_CLEANUP=ON -Dopenjfx_ENABLE_CLEANUP=ON || exit /b 1
+      nmake installer || exit /b 1
+      popd || exit /b 1
+      dir dist || exit /b 1
+      if not "$(OJDKBUILD_JDK8_RPMBUILD)" == "0" tools\ghr\ghr.exe -t $(OJDKBUILD_GITHUB_TOKEN) -u ojdkbuild -r ojdkbuild -c $(Build.SourceVersion) $(OJDKBUILD_JDK8_32_TAG) dist || exit /b 1
+    enabled: false
+
+- job: jdk8_32_debug
+  timeoutInMinutes: 0
+  pool:
+    vmImage: "vs2015-win2012r2"
+  steps:
+  - script: |
+      @echo on
+      git config --global core.autocrlf false || exit /b 1
+      call resources\scripts\modules.bat resources/profiles/jdk8.gitmodules.txt || exit /b 1
+      rd /s /q ".git" || exit /b 1
+      call "resources/scripts/set-compile-env-vs10-x86.bat" || exit /b 1
+      mkdir build || exit /b 1
+      pushd build || exit /b 1
+      cmake ../src/java-1.8.0-openjdk -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Debug -Dopenjdk_RPMBUILD=$(OJDKBUILD_JDK8_RPMBUILD) -Dopenjdk_ENABLE_32_BIT=ON -Dopenjdk_ENABLE_CLEANUP=ON || exit /b 1
+      nmake zip_debug || exit /b 1
+      popd || exit /b 1
+      dir dist || exit /b 1
+      if not "$(OJDKBUILD_JDK8_RPMBUILD)" == "0" tools\ghr\ghr.exe -t $(OJDKBUILD_GITHUB_TOKEN) -u ojdkbuild -r ojdkbuild -c $(Build.SourceVersion) $(OJDKBUILD_JDK8_32_DEBUG_TAG) dist || exit /b 1
+    enabled: false
+
+- job: jdk11
+  timeoutInMinutes: 0
+  pool:
+    vmImage: "vs2015-win2012r2"
+  steps:
+  - script: |
+      @echo on
+      git config --global core.autocrlf false || exit /b 1
+      call resources\scripts\modules.bat resources/profiles/jdk11.gitmodules.txt || exit /b 1
+      rd /s /q ".git" || exit /b 1
+      call "resources/scripts/set-compile-env-vs15-x86_64.bat" || exit /b 1
+      mkdir build || exit /b 1
+      pushd build || exit /b 1
+      cmake ../src/java-11-openjdk -G "NMake Makefiles" -Dopenjdk_RPMBUILD=$(OJDKBUILD_JDK11_RPMBUILD) -Dopenjdk_ENABLE_BOOTCYCLE=ON -Dopenjdk_ENABLE_CLEANUP=ON || exit /b 1
+      nmake installer || exit /b 1
+      popd || exit /b 1
+      dir dist || exit /b 1
+      if not "$(OJDKBUILD_JDK11_RPMBUILD)" == "0" tools\ghr\ghr.exe -t $(OJDKBUILD_GITHUB_TOKEN) -u ojdkbuild -r ojdkbuild -c $(Build.SourceVersion) $(OJDKBUILD_JDK11_TAG) dist || exit /b 1
+    enabled: false
+
+- job: jdk11_debug
+  timeoutInMinutes: 0
+  pool:
+    vmImage: "vs2015-win2012r2"
+  steps:
+  - script: |
+      @echo on
+      git config --global core.autocrlf false || exit /b 1
+      call resources\scripts\modules.bat resources/profiles/jdk11.gitmodules.txt || exit /b 1
+      rd /s /q ".git" || exit /b 1
+      call "resources/scripts/set-compile-env-vs15-x86_64.bat" || exit /b 1
+      mkdir build || exit /b 1
+      pushd build || exit /b 1
+      cmake ../src/java-11-openjdk -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Debug -Dopenjdk_RPMBUILD=$(OJDKBUILD_JDK11_RPMBUILD) -Dopenjdk_ENABLE_CLEANUP=ON || exit /b 1
+      nmake zip_debug || exit /b 1
+      popd || exit /b 1
+      dir dist || exit /b 1
+      if not "$(OJDKBUILD_JDK11_RPMBUILD)" == "0" tools\ghr\ghr.exe -t $(OJDKBUILD_GITHUB_TOKEN) -u ojdkbuild -r ojdkbuild -c $(Build.SourceVersion) $(OJDKBUILD_JDK11_DEBUG_TAG) dist || exit /b 1
+    enabled: false
+
+- job: jdk13
+  timeoutInMinutes: 0
+  pool:
+    vmImage: "vs2015-win2012r2"
+  steps:
+  - script: |
+      @echo on
+      git config --global core.autocrlf false || exit /b 1
+      call resources\scripts\modules.bat resources/profiles/jdk13.gitmodules.txt || exit /b 1
+      rd /s /q ".git" || exit /b 1
+      call "resources/scripts/set-compile-env-vs15-x86_64.bat" || exit /b 1
+      mkdir build || exit /b 1
+      pushd build || exit /b 1
+      cmake ../src/java-13-openjdk -G "NMake Makefiles" -Dopenjdk_RPMBUILD=$(OJDKBUILD_JDK13_RPMBUILD) -Dopenjdk_ENABLE_BOOTCYCLE=ON -Dopenjdk_ENABLE_CLEANUP=ON || exit /b 1
+      nmake installer || exit /b 1
+      popd || exit /b 1
+      dir dist || exit /b 1
+      if not "$(OJDKBUILD_JDK13_RPMBUILD)" == "0" tools\ghr\ghr.exe -t $(OJDKBUILD_GITHUB_TOKEN) -u ojdkbuild -r ojdkbuild -c $(Build.SourceVersion) $(OJDKBUILD_JDK13_TAG) dist || exit /b 1
+    enabled: false
+
+- job: jdk13_debug
+  timeoutInMinutes: 0
+  pool:
+    vmImage: "vs2015-win2012r2"
+  steps:
+  - script: |
+      @echo on
+      git config --global core.autocrlf false || exit /b 1
+      call resources\scripts\modules.bat resources/profiles/jdk13.gitmodules.txt || exit /b 1
+      rd /s /q ".git" || exit /b 1
+      call "resources/scripts/set-compile-env-vs15-x86_64.bat" || exit /b 1
+      mkdir build || exit /b 1
+      pushd build || exit /b 1
+      cmake ../src/java-13-openjdk -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Debug -Dopenjdk_RPMBUILD=$(OJDKBUILD_JDK13_RPMBUILD) -Dopenjdk_ENABLE_CLEANUP=ON || exit /b 1
+      nmake zip_debug || exit /b 1
+      popd || exit /b 1
+      dir dist || exit /b 1
+      if not "$(OJDKBUILD_JDK13_RPMBUILD)" == "0" tools\ghr\ghr.exe -t $(OJDKBUILD_GITHUB_TOKEN) -u ojdkbuild -r ojdkbuild -c $(Build.SourceVersion) $(OJDKBUILD_JDK13_DEBUG_TAG) dist || exit /b 1
+    enabled: false

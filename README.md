@@ -9,6 +9,7 @@ Info links:
 
  - [wiki page with a background information about the project](https://github.com/ojdkbuild/ojdkbuild/wiki/Motivation)
  - [overview of other OpenJDK builds](https://blog.joda.org/2018/09/time-to-look-beyond-oracles-jdk.html)
+ - [OpenJDK Updates Project Builds](http://mail.openjdk.java.net/pipermail/jdk8u-dev/2019-April/009105.html)
  - [differences from other OpenJDK 8 builds](https://stackoverflow.com/a/52218632)
  - [on CVEs lists](https://security.stackexchange.com/q/175611)
 
