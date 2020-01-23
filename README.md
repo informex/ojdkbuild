@@ -50,6 +50,10 @@ Other sources and binaries in this project (cygwin, freetype etc.) are released 
 Changelog
 ---------
 
+**2020-01-21**
+
+ * Syncing from upstream repository & build for `1.8.0.242-8`, with custom installation parameters
+
 **2018-11-21**
 
  * Fork & first build for `1.8.0.191-1`, with custom installation parameters
